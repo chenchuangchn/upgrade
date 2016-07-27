@@ -1,0 +1,70 @@
+#!/bin/sh
+
+ulimit -c unlimited
+
+if [ -f /home/forlinx/key_delete ]
+then
+	/usr/sbin/key_delete
+else
+	/home/forlinx/key_delete
+fi
+
+echo "start"
+
+if [ -f /etc/wpa_supplicant.conf ]
+    then
+               ifconfig eth0 down
+               ifconfig wlan0 up
+               # read IP</media/mmcblk0p1/IP.txt
+              # ifconfig wlan0 $IP
+               #route add default gw 192.168.0.1
+              # route
+               iwlist wlan0 scan
+               read name</usr/sbin/name.txt
+               read password</usr/sbin/password.txt
+               iwconfig wlan0 essid "$name"
+               wpa_passphrase $name "$password" > /etc/wpa_supplicant.conf
+               sed -i "1i #PSK/TKIP" /etc/wpa_supplicant.conf
+              sed -i "2i          " /etc/wpa_supplicant.conf
+               sed -i "3i ctrl_interface=/var/run/wpa_supplicant" /etc/wpa_supplicant.conf
+               sed -i "6i scan_ssid=1" /etc/wpa_supplicant.conf
+               sed -i "7i key_mgmt=WPA-EAP WPA-PSK IEEE8021X NONE" /etc/wpa_supplicant.conf
+               sed -i "8i pairwise=TKIP CCMP" /etc/wpa_supplicant.conf
+               sed -i "9i group=CCMP TKIP WEP104 WEP40" /etc/wpa_supplicant.conf
+		wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf &
+               udhcpc -iwlan0
+			   
+		/usr/sbin/upgrade.bin
+		
+		if [ -f /home/forlinx/broadcast.bin ]
+		then
+			/home/forlinx/broadcast.bin
+		else
+			/usr/sbin/broadcast.bin
+		fi
+		
+		if [ -f /home/forlinx/gateway.bin ]
+		then
+			/home/forlinx/gateway.bin
+		else
+			/usr/sbin/gateway.bin
+		fi
+		
+    else
+		 ifconfig eth0 down
+		 ifconfig wlan0 up
+		ifconfig wlan0 10.5.5.1
+		hostapd /etc/hostapd.conf -B
+		dhcpd      
+   
+		wpa_passphrase feiling "123456785" >> /etc/wpa_supplicant.conf
+		sync
+		if [ -f /home/forlinx/app_server ]
+		then
+			/home/forlinx/app_server
+		else
+			/usr/sbin/app_server
+		fi
+
+fi
+

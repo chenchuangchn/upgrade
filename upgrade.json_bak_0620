@@ -1,0 +1,26 @@
+{
+	"upgradecmd":"wget -T 30 http://222.222.218.50:8886/upgrade.json -O ./upgrade.json.download",
+	"programs":[
+		{
+			"name":"broadcast.bin",
+			"version":"1",
+			"downloadname":"/home/forlinx/broadcast.bin.download",
+			"updatecmd":"wget -T 30 http://222.222.218.50:8886/broadcast.bin -O /home/forlinx/broadcast.bin.download",
+			"runcmd":"ls -l /home/forlinx/broadcast.bin.download"
+		},
+		{
+			"name":"gateway.bin",
+			"version":"0",
+			"downloadname":"/home/forlinx/gateway.bin.download",
+			"updatecmd":"wget -T 30 http://222.222.218.50:8886/gateway.bin -O /home/forlinx/gateway.bin.download",
+			"runcmd":"ls -l /home/forlinx/gateway.bin.download"
+		},
+		{
+			"name":"other",
+			"version":"1",
+			"downloadname":"/home/forlinx/other.download",
+			"updatecmd":"wget -T 30 http://222.222.218.50:8886/other -O /home/forlinx/other.download",
+			"runcmd":"ls"
+		}
+	]
+}

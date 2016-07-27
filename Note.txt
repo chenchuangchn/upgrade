@@ -1,0 +1,3 @@
+upgrade.json文件的注意事项：
+downloadname 和 updatecmd -O 的路径必须一致
+name的路径必须和WiFi脚本中对应一致。

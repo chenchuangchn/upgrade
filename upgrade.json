@@ -1,0 +1,40 @@
+{
+	"upgradecmd":"wget -T 30 http://gateway.axtchild.com:8886/upgrade.json -O ./upgrade.json.download",
+	"programs":[
+		{
+			"name":"/home/forlinx/broadcast.bin",
+			"version":"0",
+			"downloadname":"/home/forlinx/broadcast.bin.download",
+			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/broadcast.bin -O /home/forlinx/broadcast.bin.download",
+			"runcmd":"chmod 777 /home/forlinx/broadcast.bin"
+		},
+		{
+			"name":"/home/forlinx/gateway.bin",
+			"version":"0",
+			"downloadname":"/home/forlinx/gateway.bin.download",
+			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/gateway.bin -O /home/forlinx/gateway.bin.download",
+			"runcmd":"chmod 777 /home/forlinx/gateway.bin"
+		},
+		{
+			"name":"/home/forlinx/delete",
+			"version":"0",
+			"downloadname":"/home/forlinx/delete.download",
+			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/delete -O /home/forlinx/delete.download",
+			"runcmd":"chmod 777 /home/forlinx/delete"
+		},
+		{
+			"name":"/home/forlinx/app_server",
+			"version":"0",
+			"downloadname":"/home/forlinx/app_server.download",
+			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/app_server -O /home/forlinx/app_server.download",
+			"runcmd":"chmod 777 /home/forlinx/app_server"
+		},
+		{
+			"name":"/home/forlinx/other",
+			"version":"0",
+			"downloadname":"/home/forlinx/other.download",
+			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/other -O /home/forlinx/other.download",
+			"runcmd":"ls /home/forlinx/other"
+		}
+	]
+}
