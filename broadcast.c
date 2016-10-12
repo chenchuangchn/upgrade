@@ -68,17 +68,18 @@ int main()
 		else
 		{		
 			char *recip = inet_ntoa(((struct sockaddr_in *)&from)->sin_addr);
-			printf("from:%s>>>%s\n",recip, smsg);	
-			if(0 == strcmp(BROADCASTVREQUEST, (const char *)smsg)){
+			printf("from:%s>>>%s\n",recip, smsg);
+			//if(0 == strcmp(BROADCASTVREQUEST, (const char *)smsg)){
+			if(0 == strncmp(BROADCASTVREQUEST, (const char *)smsg, strlen(BROADCASTVREQUEST))){
 				if (sendto(sock, BROADCASTVRESPONSE, sizeof(BROADCASTVREQUEST), 0,  
 							(struct sockaddr *) &from,  
-							sizeof(struct sockaddr)) < 0) {  
+							sizeof(struct sockaddr)) <= 0) {  
 					fprintf(stdout, "sendto error!\n");  
 					continue;
 				}
+				fprintf(stdout, "send ok\n");
 			}
 			//back res
-			fprintf(stdout, "send ok\n");
 		}
 		fprintf(stdout, "hhh\n");
 	}
