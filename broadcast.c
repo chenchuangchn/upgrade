@@ -244,7 +244,7 @@ int main(int argc, char **argv)
     char *localstr = NULL;
 	int rlen;
 	
-	//daemon(1,1);
+	daemon(1,1);
 	setvbuf(stdout, NULL, _IONBF, 0); 
 	fflush(stdout); 
 
