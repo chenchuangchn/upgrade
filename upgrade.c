@@ -6,11 +6,11 @@
 #include "conf.h"
 #include "list.h"
 
-//#define LOCALCONFPATH "./upgrade.json"
-//#define URLCONFPATH "./upgrade.json.download"
+#define LOCALCONFPATH "./upgrade.json"
+#define URLCONFPATH "./upgrade.json.download"
 
-#define LOCALCONFPATH "/home/root/upgrade.json"
-#define URLCONFPATH "/home/root/upgrade.json.download"
+//#define LOCALCONFPATH "/home/root/upgrade.json"
+//#define URLCONFPATH "/home/root/upgrade.json.download"
 
 cJSON * loadconffile(char * path){ 
 	FILE *f;
@@ -41,6 +41,7 @@ void execmajor(void){
 }
 
 int main(){
+	int ret;
 	if(atexit(execmajor)){
 		fprintf(stdout, "register at exit fail\n");
 	}
@@ -58,21 +59,30 @@ int main(){
 	}
 	struct conf * localconf = loadconf(localjson);
 	int rt  = system(localconf->upgradecmd);
-	if(rt == 0) {
+	int rt2 = system("md5sum upgrade.json.download > upgrade.json.md5");
+	int rt3 = cmp_md5_files("./upgrade.json.md5.download", "./upgrade.json.md5");
+	printf("rt = %d\n", rt);
+	printf("rt2 = %d\n", rt2);
+	printf("rt3 = %d\n", rt3);
+	if((rt == 0) && (rt2 == 0) && (rt3 == 0)) {
 		cJSON * urljson = loadconffile(URLCONFPATH);
 		if(!urljson) {
 			printf("urljson is NULL\n");
 			return -1;
 		}
+		printf("loadconf...\n");
 		struct conf * urlconf = loadconf(urljson);
 		cJSON_Delete(localjson);
 		cJSON_Delete(urljson);
+		printf("getconf...\n");
 		struct list_head * head = getconf(localconf, urlconf); 
 		if(head && !list_empty(head)) {
-			downloadprogram(head);
+			printf("downloadprogram..\n");
+			ret = downloadprogram(head);
 		}
 		free(head);
-		copy(URLCONFPATH, LOCALCONFPATH);
+		if(0 == ret)
+			copy(URLCONFPATH, LOCALCONFPATH);
 		remove(URLCONFPATH); 
 
 		//runprograms(urlconf);

@@ -1,39 +1,45 @@
 {
-	"upgradecmd":"wget -T 30 http://gateway.axtchild.com:8886/upgrade.json -O ./upgrade.json.download",
+	"upgradecmd":"wget -T 60 222.222.218.50:8886/upgrade.json -O ./upgrade.json.download &&\
+	    wget -T 60 222.222.218.50:8886/upgrade.json.md5 -O ./upgrade.json.md5.download",
 	"programs":[
 		{
 			"name":"/home/forlinx/broadcast.bin",
 			"version":"0",
 			"downloadname":"/home/forlinx/broadcast.bin.download",
-			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/broadcast.bin -O /home/forlinx/broadcast.bin.download",
+			"updatecmd":"wget -T 60 222.222.218.50:8886/broadcast.bin -O /home/forlinx/broadcast.bin.download &&\
+			 wget -T 60 222.222.218.50:8886/broadcast.bin.md5 -O /home/forlinx/broadcast.bin.md5.download",
 			"runcmd":"chmod 777 /home/forlinx/broadcast.bin"
 		},
 		{
 			"name":"/home/forlinx/gateway.bin",
-			"version":"0",
+			"version":"1",
 			"downloadname":"/home/forlinx/gateway.bin.download",
-			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/gateway.bin -O /home/forlinx/gateway.bin.download",
+			"updatecmd":"wget -T 60 222.222.218.50:8886/gateway.bin -O /home/forlinx/gateway.bin.download &&\
+			 wget -T 60 222.222.218.50:8886/gateway.bin.md5 -O /home/forlinx/gateway.bin.md5.download",
 			"runcmd":"chmod 777 /home/forlinx/gateway.bin"
 		},
 		{
 			"name":"/home/forlinx/delete",
 			"version":"0",
 			"downloadname":"/home/forlinx/delete.download",
-			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/delete -O /home/forlinx/delete.download",
+			"updatecmd":"wget -T 60 222.222.218.50:8886/delete -O /home/forlinx/delete.download &&\
+			 wget -T 60 222.222.218.50:8886/delete.md5 -O /home/forlinx/delete.md5.download",
 			"runcmd":"chmod 777 /home/forlinx/delete"
 		},
 		{
 			"name":"/home/forlinx/app_server",
 			"version":"0",
 			"downloadname":"/home/forlinx/app_server.download",
-			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/app_server -O /home/forlinx/app_server.download",
+			"updatecmd":"wget -T 60 222.222.218.50:8886/app_server -O /home/forlinx/app_server.download &&\
+			 wget -T 60 222.222.218.50:8886/app_server.md5 -O /home/forlinx/app_server.md5.download",
 			"runcmd":"chmod 777 /home/forlinx/app_server"
 		},
 		{
 			"name":"/home/forlinx/other",
 			"version":"0",
 			"downloadname":"/home/forlinx/other.download",
-			"updatecmd":"wget -T 30 http://gateway.axtchild.com:8886/other -O /home/forlinx/other.download",
+			"updatecmd":"wget -T 60 222.222.218.50:8886/other -O /home/forlinx/other.download &&\
+			 wget -T 60 222.222.218.50:8886/other.md5 -O /home/forlinx/other.md5.download",
 			"runcmd":"ls /home/forlinx/other"
 		}
 	]
