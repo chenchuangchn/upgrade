@@ -48,7 +48,6 @@ int cmp_md5_files(char *path1, char *path2)
 	}
 	
 	ret = strncmp(buf, buf2, 32);
-	printf("ret = %d\n", ret);
 
 end:
 	close(fd1);
@@ -235,7 +234,7 @@ int downloadprogram(struct list_head * head)
 			
 		}
 		else {
-			printf("[downloadprogram] updaecmd is failed\n");
+			printf("[downloadprogram] updatecmd is failed\n");
 			return -1;
 		}
 		//system(program->runcmd);
