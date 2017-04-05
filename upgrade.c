@@ -90,6 +90,8 @@ int main(){
 	}else { 
 		runprograms(localconf);
 	}
+	if(0 == rt)
+		system("rm ./upgrade.json.md5.download");
 	destroyconf(localconf);
 	return 0;
 }

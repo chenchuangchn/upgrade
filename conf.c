@@ -234,6 +234,10 @@ int downloadprogram(struct list_head * head)
 			}
 			
 		}
+		else {
+			printf("[downloadprogram] updaecmd is failed\n");
+			return -1;
+		}
 		//system(program->runcmd);
 	}
 	return ret;
