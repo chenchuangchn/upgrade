@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "cJSON.h"
 #include "conf.h"
 
@@ -15,6 +19,44 @@
 #define RUNCMD "runcmd"
 
 #define PAGESIZE 512
+
+int cmp_md5_files(char *path1, char *path2)
+{
+	int fd1, fd2, ret;
+	char buf[33] = {0};
+	char buf2[33] = {0};
+	
+	fd1 = open(path1, O_RDONLY);
+	if(-1 == fd1) {
+		perror("open path1");
+		ret = -1;
+		goto failed;
+	}
+	fd2 = open(path2, O_RDONLY);
+	if(-1 == fd2) {
+		perror("open path2");
+		goto open2;
+	}
+	if(-1 == read(fd1, buf, 32)) {
+		perror("read fd1");
+		goto end;
+	}
+	if(-1 == read(fd2, buf2, 32)) {
+		perror("read fd2");
+		ret = -1;
+		goto end;
+	}
+	
+	ret = strncmp(buf, buf2, 32);
+
+end:
+	close(fd1);
+open2:
+	close(fd2);
+failed:
+	return ret;
+}
+
 
 void copy(char * src, char * dst){
 	FILE *in_fd = fopen(src,"rb"); 
@@ -62,6 +104,7 @@ struct conf * loadconf(cJSON *json){
 	cJSON * updatecmd;
 	cJSON * runcmd;
 
+
 	int i = 0;
 	for(;i<programcount; i++){ 
 		cJSON * subitem = cJSON_GetArrayItem(jprograms, i);
@@ -74,7 +117,7 @@ struct conf * loadconf(cJSON *json){
 			programs[i].version = atoi(version->valuestring);
 		}
 		downloadname = cJSON_GetObjectItem(subitem, DOWNLOADNAME);
-		if(version && version->type == cJSON_String){
+		if(downloadname && downloadname->type == cJSON_String){
 			programs[i].downloadname = strdup(downloadname->valuestring);
 		} 
 		updatecmd  = cJSON_GetObjectItem(subitem, UPDATECMD);
@@ -152,24 +195,51 @@ void destroyconf(struct conf * conf){
 	free(conf);
 }
 
-void downloadprogram(struct list_head * head)
+int downloadprogram(struct list_head * head)
 {
 	struct program * program;
+	char cmd[128];
+	char md5_name[64];
+	char md5_name_down[64];
+	int ret = 1;
 
 	struct list_head * pos, *n;
-	list_for_each_safe(pos, n, head){ 
+	list_for_each_safe(pos, n, head) { 
 		program = list_entry(pos, struct program, list); 
 		remove(program->downloadname);
+		printf("====== updatecmd...======\n");
 		if (0 == system(program->updatecmd)) {
-			printf("copy %s to %s...\n", program->downloadname, program->name);
-			copy(program->downloadname, program->name); 
-			int rt = remove(program->downloadname);
-			if(rt)
-				fprintf(stdout, "%d %s\n", rt, strerror(errno));
-			system(program->runcmd);
+			memset(cmd, 0, 128);
+			memset(md5_name, 0, 64);
+			memset(md5_name_down, 0, 64);
+			snprintf(md5_name, 64, "%s.md5", program->name);
+			printf("%s\n", md5_name);
+			snprintf(md5_name_down, 64, "%s.md5.download", program->name);
+			printf("%s\n", md5_name_down);
+			snprintf(cmd, 128, "md5sum -b %s > %s", program->downloadname, md5_name);
+			printf("%s\n", cmd);
+			//system(cmd);
+			if((0 == system(cmd)) && (0 == cmp_md5_files(md5_name, md5_name_down))) {
+				printf("copy %s to %s...\n", program->downloadname, program->name);
+				ret = 0;
+				copy(program->downloadname, program->name); 
+			
+				printf("[downloadprogram] remove...\n");
+				int rt = remove(program->downloadname);
+				if(rt)
+					fprintf(stdout, "%d %s\n", rt, strerror(errno));
+				printf("[downloadprogram] program->runcmd..\n");
+				ret = system(program->runcmd);
+			}
+			
+		}
+		else {
+			printf("[downloadprogram] updatecmd is failed\n");
+			return -1;
 		}
 		//system(program->runcmd);
 	}
+	return ret;
 }
 
 void runprograms(struct conf * urlconf){
