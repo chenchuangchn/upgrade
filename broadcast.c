@@ -151,7 +151,7 @@ int parse_one_message(char *msg, struct remote_request *req)
 			break;
 		printf("--> %s\n", subp[i]);
 	}
-	if(0 == i) {
+	if(i < 3) {
 		printf("[parse_recv_message]no match\n");
 		return -1;
 	}
